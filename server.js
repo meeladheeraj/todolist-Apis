@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
-
+const app = express();
 // Load environment variables
 dotenv.config();
 
@@ -13,7 +13,7 @@ app.use(async (req, res, next) => {
 });
 
 // Initialize Express
-const app = express();
+
 
 // Middleware
 app.use(cors());

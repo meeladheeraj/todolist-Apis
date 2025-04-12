@@ -31,7 +31,7 @@ app.use('/api/tags', require('./routes/api/tags'));
 
 // Basic route for testing
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to the Kanban API' });
+  res.json({ message: 'Welcome to the ToDoList API' });
 });
 
 // Error handling middleware

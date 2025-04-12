@@ -5,7 +5,7 @@ const path = require('path');
 // Import controllers using absolute paths
 const statusController = require(path.join(__dirname, '../../controllers/statusController'));
 const cardController = require(path.join(__dirname, '../../controllers/cardController'));
-const { protect } = require('../../middleware/auth');
+const { protect } = require('../../middleWare/authorization');
 
 // Routes for /api/statuses
 router.route('/:id')

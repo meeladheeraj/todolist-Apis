@@ -29,7 +29,7 @@ const {
   getProjectActivities
 } = require('../../controllers/activityController');
 
-const { protect } = require('../../middleware/auth');
+const { protect } = require('../../middleWare/authorization');
 
 // Routes for /api/projects
 router.route('/')

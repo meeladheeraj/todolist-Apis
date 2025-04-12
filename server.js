@@ -7,7 +7,10 @@ const connectDB = require('./config/db');
 dotenv.config();
 
 // Connect to database
-connectDB();
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
 
 // Initialize Express
 const app = express();

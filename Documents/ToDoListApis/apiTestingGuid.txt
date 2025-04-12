@@ -1,0 +1,296 @@
+# API Testing Guide
+
+This guide demonstrates how to test your Kanban API endpoints using Postman.
+
+## Setup
+
+1. Download and install [Postman](https://www.postman.com/downloads/)
+2. Ensure your API server is running
+3. Create a new collection in Postman for your Kanban API
+
+## Authentication Flow
+
+### 1. Register a User
+
+- **Endpoint**: `POST /api/auth/register`
+- **Body** (raw JSON):
+```json
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "password123"
+}
+```
+- **Expected Response**: 201 Created with user data and token
+
+### 2. Login
+
+- **Endpoint**: `POST /api/auth/login`
+- **Body** (raw JSON):
+```json
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+```
+- **Expected Response**: 200 OK with user data and token
+
+### 3. Set Up Authorization
+
+- Copy the token from the login/register response
+- Create a collection variable called `token`
+- In the Postman collection, go to the "Authorization" tab
+- Select "Bearer Token" as the type
+- Use `{{token}}` as the token value
+
+## Project Flow
+
+### 1. Create a Project
+
+- **Endpoint**: `POST /api/projects`
+- **Body** (raw JSON):
+```json
+{
+  "name": "Test Project",
+  "description": "This is a test project"
+}
+```
+- **Expected Response**: 201 Created with project data
+
+### 2. Get All Projects
+
+- **Endpoint**: `GET /api/projects`
+- **Expected Response**: 200 OK with array of projects
+
+### 3. Get a Specific Project
+
+- **Endpoint**: `GET /api/projects/:id`
+- Replace `:id` with the project ID from the previous response
+- **Expected Response**: 200 OK with project data
+
+### 4. Add Another User to the Project
+
+- First register another user using the registration endpoint
+- **Endpoint**: `POST /api/projects/:id/members`
+- Replace `:id` with the project ID
+- **Body** (raw JSON):
+```json
+{
+  "userId": "user_id_of_other_user",
+  "role": "member"
+}
+```
+- **Expected Response**: 200 OK with updated project data
+
+## Status Flow
+
+### 1. Get Default Statuses
+
+- **Endpoint**: `GET /api/projects/:projectId/statuses`
+- Replace `:projectId` with your project ID
+- **Expected Response**: 200 OK with array of statuses (should have 3 default statuses)
+
+### 2. Create a New Status
+
+- **Endpoint**: `POST /api/projects/:projectId/statuses`
+- Replace `:projectId` with your project ID
+- **Body** (raw JSON):
+```json
+{
+  "name": "In Review",
+  "description": "Tasks that need review",
+  "color": "#9b59b6"
+}
+```
+- **Expected Response**: 201 Created with status data
+
+### 3. Update a Status
+
+- **Endpoint**: `PUT /api/statuses/:id`
+- Replace `:id` with the status ID
+- **Body** (raw JSON):
+```json
+{
+  "name": "Under Review",
+  "color": "#8e44ad"
+}
+```
+- **Expected Response**: 200 OK with updated status data
+
+## Card Flow
+
+### 1. Create a Card
+
+- **Endpoint**: `POST /api/projects/:projectId/cards`
+- Replace `:projectId` with your project ID
+- **Body** (raw JSON):
+```json
+{
+  "title": "Test Card",
+  "description": "This is a test card",
+  "status": "status_id_here",
+  "priority": "Medium",
+  "due_date": "2023-12-31T23:59:59.999Z"
+}
+```
+- **Expected Response**: 201 Created with card data
+
+### 2. Get Cards for a Project
+
+- **Endpoint**: `GET /api/projects/:projectId/cards`
+- Replace `:projectId` with your project ID
+- **Expected Response**: 200 OK with array of cards
+
+### 3. Get Cards for a Specific Status
+
+- **Endpoint**: `GET /api/statuses/:statusId/cards`
+- Replace `:statusId` with the status ID
+- **Expected Response**: 200 OK with array of cards in that status
+
+### 4. Update a Card
+
+- **Endpoint**: `PUT /api/cards/:id`
+- Replace `:id` with the card ID
+- **Body** (raw JSON):
+```json
+{
+  "title": "Updated Card",
+  "description": "This card has been updated",
+  "priority": "High"
+}
+```
+- **Expected Response**: 200 OK with updated card data
+
+### 5. Move a Card to Another Status
+
+- **Endpoint**: `PUT /api/cards/:id`
+- Replace `:id` with the card ID
+- **Body** (raw JSON):
+```json
+{
+  "status": "another_status_id"
+}
+```
+- **Expected Response**: 200 OK with updated card data
+
+## Tag Flow
+
+### 1. Create a Tag
+
+- **Endpoint**: `POST /api/projects/:projectId/tags`
+- Replace `:projectId` with your project ID
+- **Body** (raw JSON):
+```json
+{
+  "name": "Bug",
+  "color": "#e74c3c"
+}
+```
+- **Expected Response**: 201 Created with tag data
+
+### 2. Add a Tag to a Card
+
+- **Endpoint**: `POST /api/cards/:cardId/tags`
+- Replace `:cardId` with your card ID
+- **Body** (raw JSON):
+```json
+{
+  "tagId": "tag_id_here"
+}
+```
+- **Expected Response**: 200 OK with updated card data
+
+### 3. Remove a Tag from a Card
+
+- **Endpoint**: `DELETE /api/cards/:cardId/tags/:tagId`
+- Replace `:cardId` with your card ID
+- Replace `:tagId` with your tag ID
+- **Expected Response**: 200 OK with updated card data
+
+## Comment Flow
+
+### 1. Add a Comment to a Card
+
+- **Endpoint**: `POST /api/cards/:cardId/comments`
+- Replace `:cardId` with your card ID
+- **Body** (raw JSON):
+```json
+{
+  "content": "This is a test comment"
+}
+```
+- **Expected Response**: 201 Created with comment data
+
+### 2. Get Comments for a Card
+
+- **Endpoint**: `GET /api/cards/:cardId/comments`
+- Replace `:cardId` with your card ID
+- **Expected Response**: 200 OK with array of comments
+
+### 3. Update a Comment
+
+- **Endpoint**: `PUT /api/comments/:id`
+- Replace `:id` with the comment ID
+- **Body** (raw JSON):
+```json
+{
+  "content": "This comment has been updated"
+}
+```
+- **Expected Response**: 200 OK with updated comment data
+
+## Activity Log Flow
+
+### 1. Get Project Activities
+
+- **Endpoint**: `GET /api/projects/:projectId/activities`
+- Replace `:projectId` with your project ID
+- **Expected Response**: 200 OK with array of activities
+
+### 2. Get Card Activities
+
+- **Endpoint**: `GET /api/cards/:cardId/activities`
+- Replace `:cardId` with your card ID
+- **Expected Response**: 200 OK with array of activities related to the card
+
+## Testing Permissions
+
+### 1. Try to Access a Project as a Non-Member
+
+- Log in as a user who is not a member of the project
+- **Endpoint**: `GET /api/projects/:id`
+- Replace `:id` with a project ID the user is not a member of
+- **Expected Response**: 403 Forbidden
+
+### 2. Try to Update a Project as a Non-Admin Member
+
+- Log in as a user who is a member (not admin) of the project
+- **Endpoint**: `PUT /api/projects/:id`
+- Replace `:id` with the project ID
+- **Body** (raw JSON):
+```json
+{
+  "name": "Unauthorized Update"
+}
+```
+- **Expected Response**: 403 Forbidden
+
+## Troubleshooting
+
+If you encounter issues while testing:
+
+1. **Authentication Problems**:
+   - Ensure your token is valid and not expired
+   - Check that you're using "Bearer " prefix with the token
+
+2. **404 Not Found**:
+   - Verify the ID you're using exists
+   - Check your API URL is correct
+
+3. **400 Bad Request**:
+   - Validate your JSON payload structure
+   - Check for required fields that might be missing
+
+4. **500 Internal Server Error**:
+   - Check your server logs for detailed error information
+   - Ensure your MongoDB connection is working

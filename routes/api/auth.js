@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getMe } = require('../../controllers/authController');
+const { register, login, getMe,refreshToken } = require('../../controllers/authController');
 const { protect } = require('../../middleWare/authorization');
 
 // Routes for /api/auth

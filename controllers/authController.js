@@ -90,10 +90,9 @@ exports.login = asyncHandler(async (req, res) => {
     }
   });
 });
+
 // @desc    Refresh access token
-
 // @route   POST /api/auth/refresh
-
 // @access  Public (with refresh token)
 
 exports.refreshToken = asyncHandler(async (req, res) => {
@@ -108,7 +107,7 @@ exports.refreshToken = asyncHandler(async (req, res) => {
   }
   try {
     // Verify refresh token
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET);
+    const decoded = jwt.verify(refreshToken,  process.env.JWT_SECRET);
 
     // Find user with this refresh token
     const user = await User.findOne({ 

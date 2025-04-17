@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Please add a password'],
     minlength: [6, 'Password must be at least 6 characters'],
     select: false
+  },
+  refresh_token: {
+    type: String,
+    select: false
   }
 }, {
   timestamps: { 
